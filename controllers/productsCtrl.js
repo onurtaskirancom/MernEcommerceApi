@@ -23,6 +23,15 @@ export const createProductCtrl = asyncHandler(async (req, res) => {
   if (productExists) {
     throw new Error('Product Already Exists');
   }
+  //find the category
+  const categoryFound = await Category.findOne({
+    name: category,
+  });
+  if (!categoryFound) {
+    throw new Error(
+      'Category not found, please create category first or check category name'
+    );
+  }
   //create the product
   const product = await Product.create({
     name,
@@ -36,6 +45,9 @@ export const createProductCtrl = asyncHandler(async (req, res) => {
     brand,
   });
   //push the product into category
+  categoryFound.products.push(product._id);
+  //resave
+  await categoryFound.save();
   //send response
   res.json({
     status: 'success',
@@ -198,7 +210,7 @@ export const updateProductCtrl = asyncHandler(async (req, res) => {
 export const deleteProductCtrl = asyncHandler(async (req, res) => {
   await Product.findByIdAndDelete(req.params.id);
   res.json({
-    status: "success",
-    message: "Product deleted successfully",
+    status: 'success',
+    message: 'Product deleted successfully',
   });
 });
