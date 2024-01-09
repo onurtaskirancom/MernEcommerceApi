@@ -4,6 +4,7 @@ import express from 'express';
 import dbConnect from '../config/dbConnect.js';
 import categoriesRouter from '../routes/categoriesRouter.js';
 import colorRouter from '../routes/colorRouter.js';
+import orderRouter from '../routes/ordersRouter.js';
 import productsRouter from '../routes/productsRoute.js';
 import reviewRouter from '../routes/reviewRouter.js';
 import userRoutes from '../routes/usersRoute.js';
@@ -24,6 +25,7 @@ app.use('/api/v1/categories/', categoriesRouter);
 app.use('/api/v1/brands/', brandsRouter);
 app.use('/api/v1/colors/', colorRouter);
 app.use('/api/v1/reviews/', reviewRouter);
+app.use('/api/v1/orders/', orderRouter);
 
 
 //err middleware
