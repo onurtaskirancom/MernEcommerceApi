@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Brand from '../model/Brand.js';
 import Product from '../model/Product.js';
+import Category from '../model/Category.js';
 
 // @desc    Create new product
 // @route   POST /api/v1/products
@@ -17,7 +18,7 @@ export const createProductCtrl = asyncHandler(async (req, res) => {
   }
   //find the brand
   const brandFound = await Brand.findOne({
-    name: brand.toLowerCase(),
+    name: brand?.toLowerCase(),
   });
 
   if (!brandFound) {
