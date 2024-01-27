@@ -77,12 +77,4 @@ export const createOrderCtrl = asyncHandler(async (req, res) => {
   });
   res.send({ url: session.url });
 
-  // payment webhook
-  //Update the user order
-  // res.json({
-  //   success: true,
-  //   message: 'Order Created',
-  //   order,
-  //   user,
-  // });
 });
