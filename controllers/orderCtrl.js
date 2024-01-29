@@ -78,3 +78,17 @@ export const createOrderCtrl = asyncHandler(async (req, res) => {
   res.send({ url: session.url });
 
 });
+
+//@desc get all orders
+//@route GET /api/v1/orders
+//@access private
+
+export const getAllordersCtrl = asyncHandler(async (req, res) => {
+  //find all orders
+  const orders = await Order.find();
+  res.json({
+    success: true,
+    message: 'All orders',
+    orders,
+  });
+});
