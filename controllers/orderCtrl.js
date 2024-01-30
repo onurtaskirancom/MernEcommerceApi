@@ -92,3 +92,19 @@ export const getAllordersCtrl = asyncHandler(async (req, res) => {
     orders,
   });
 });
+
+//@desc get single order
+//@route GET /api/v1/orders/:id
+//@access private/admin
+
+export const getSingleOrderCtrl = asyncHandler(async (req, res) => {
+  //get the id from params
+  const id = req.params.id;
+  const order = await Order.findById(id);
+  //send response
+  res.status(200).json({
+    success: true,
+    message: "Single order",
+    order,
+  });
+});
