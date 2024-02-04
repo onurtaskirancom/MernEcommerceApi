@@ -12,6 +12,7 @@ import userRoutes from '../routes/usersRoute.js';
 import { globalErrhandler, notFound } from '../middlewares/globalErrHandler.js';
 import brandsRouter from '../routes/brandsRouter.js';
 import Order from '../model/Order.js';
+import couponsRouter from '../routes/couponsRouter.js';
 
 //db connect
 dbConnect();
@@ -94,6 +95,7 @@ app.use('/api/v1/brands/', brandsRouter);
 app.use('/api/v1/colors/', colorRouter);
 app.use('/api/v1/reviews/', reviewRouter);
 app.use('/api/v1/orders/', orderRouter);
+app.use('/api/v1/coupons/', couponsRouter);
 
 //err middleware
 app.use(notFound);
