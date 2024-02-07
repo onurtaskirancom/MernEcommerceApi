@@ -14,6 +14,22 @@ import User from '../model/User.js';
 const stripe = new Stripe(process.env.STRIPE_KEY);
 
 export const createOrderCtrl = asyncHandler(async (req, res) => {
+  //get the coupon
+  const { coupon } = req?.query;
+
+  const couponFound = await Coupon.findOne({
+    code: coupon?.toUpperCase(),
+  });
+  if (couponFound?.isExpired) {
+    throw new Error('Coupon has expired');
+  }
+  if (!couponFound) {
+    throw new Error('Coupon does exists');
+  }
+
+  //get discount
+  const discount = couponFound?.discount / 100;
+
   //Get the payload(customer, orderItems, shipppingAddress, totalPrice);
   const { orderItems, shippingAddress, totalPrice } = req.body;
   console.log(req.body);
@@ -32,8 +48,8 @@ export const createOrderCtrl = asyncHandler(async (req, res) => {
     user: user?._id,
     orderItems,
     shippingAddress,
-    // totalPrice: couponFound ? totalPrice - totalPrice * discount : totalPrice,
-    totalPrice,
+    totalPrice: couponFound ? totalPrice - totalPrice * discount : totalPrice,
+    // totalPrice,
   });
 
   //Update the product qty
@@ -76,7 +92,6 @@ export const createOrderCtrl = asyncHandler(async (req, res) => {
     cancel_url: 'http://localhost:3000/cancel',
   });
   res.send({ url: session.url });
-
 });
 
 //@desc get all orders
