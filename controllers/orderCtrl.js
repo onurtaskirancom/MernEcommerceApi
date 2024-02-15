@@ -119,7 +119,7 @@ export const getSingleOrderCtrl = asyncHandler(async (req, res) => {
   //send response
   res.status(200).json({
     success: true,
-    message: "Single order",
+    message: 'Single order',
     order,
   });
 });
@@ -143,7 +143,31 @@ export const updateOrderCtrl = asyncHandler(async (req, res) => {
   );
   res.status(200).json({
     success: true,
-    message: "Order updated",
+    message: 'Order updated',
     updatedOrder,
+  });
+});
+
+//@desc get sales sum of orders
+//@route GET /api/v1/orders/sales/sum
+//@access private/admin
+
+export const getSalesSumCtrl = asyncHandler(async (req, res) => {
+  //get the sales
+  const sales = await Order.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalSales: {
+          $sum: '$totalPrice',
+        },
+      },
+    },
+  ]);
+  //send response
+  res.status(200).json({
+    success: true,
+    message: 'Sum of orders',
+    sales,
   });
 });
