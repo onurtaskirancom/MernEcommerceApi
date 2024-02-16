@@ -152,22 +152,32 @@ export const updateOrderCtrl = asyncHandler(async (req, res) => {
 //@route GET /api/v1/orders/sales/sum
 //@access private/admin
 
-export const getSalesSumCtrl = asyncHandler(async (req, res) => {
-  //get the sales
-  const sales = await Order.aggregate([
+export const getOrderStatsCtrl = asyncHandler(async (req, res) => {
+  // get order order
+  const orders = await Order.aggregate([
     {
       $group: {
         _id: null,
+        minimumSale: {
+          $min: '$totalPrice',
+        },
         totalSales: {
           $sum: '$totalPrice',
         },
+        maxSale: {
+          $max: '$totalPrice',
+        },
+        avgSale: {
+          $avg: '$totalPrice',
+        },
       },
     },
-  ]);
-  //send response
-  res.status(200).json({
-    success: true,
-    message: 'Sum of orders',
-    sales,
-  });
+  ])
+    //send response
+    .res.status(200)
+    .json({
+      success: true,
+      message: 'Sum of orders',
+      orders,
+    });
 });
