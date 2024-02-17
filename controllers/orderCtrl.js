@@ -153,7 +153,7 @@ export const updateOrderCtrl = asyncHandler(async (req, res) => {
 //@access private/admin
 
 export const getOrderStatsCtrl = asyncHandler(async (req, res) => {
-  // get order order
+  //get order stats
   const orders = await Order.aggregate([
     {
       $group: {
@@ -172,12 +172,32 @@ export const getOrderStatsCtrl = asyncHandler(async (req, res) => {
         },
       },
     },
-  ])
-    //send response
-    .res.status(200)
-    .json({
-      success: true,
-      message: 'Sum of orders',
-      orders,
-    });
+  ]);
+  //get the date
+  const date = new Date();
+  const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const saleToday = await Order.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: today,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalSales: {
+          $sum: '$totalPrice',
+        },
+      },
+    },
+  ]);
+  //send response
+  res.status(200).json({
+    success: true,
+    message: 'Sum of orders',
+    orders,
+    saleToday,
+  });
 });
